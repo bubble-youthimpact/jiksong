@@ -30,6 +30,10 @@
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{min-height:100%;display:flex;flex-direction:column}
+#app{flex:1 0 auto}
+.site-foot{flex-shrink:0}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 img,svg{max-width:100%}
 a{color:inherit}
@@ -208,6 +212,7 @@ textarea.field{border-radius:22px;resize:vertical;min-height:90px}
 /* Profile */
 .p-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:52px}
 .p-head .page-title{margin-bottom:6px}
+.p-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .seg{display:inline-flex;background:var(--footer);border-radius:999px;padding:5px;box-shadow:0 10px 24px -12px rgba(50,20,5,.5)}
 .seg button{border:0;background:none;color:#D8C6B2;font:700 14px var(--body);padding:11px 22px;border-radius:999px;cursor:pointer}
 .seg button.on{background:var(--green);color:#fff}
@@ -635,8 +640,7 @@ const go = h => { location.hash = h; };
 function renderNav(){
   const {path} = parse(); const u = me(); const n = cartCount();
   const link = (h, label, extra = '') => `<a href="#${h}" class="${path === h ? 'active' : ''}">${label}${extra}</a>`;
-  $('#nav').innerHTML = link('/farms', 'Farms') + link('/cart', 'Cart', n ? `<span class="badge">${n}</span>` : '') + link('/orders', 'Orders') +
-    (u ? `<button data-action="logout">Log Out</button>` : link('/login', 'Log In'));
+  $('#nav').innerHTML = link('/farms', 'Farms') + link('/cart', 'Cart', n ? `<span class="badge">${n}</span>` : '') + link('/orders', 'Orders');
   $('#headCta').innerHTML = (u ? `<a class="btn btn-green" href="#/profile">Hi, ${esc(u.name.split(' ')[0])}</a>` : `<a class="btn btn-green" href="#/signup">Join JIKSONG</a>`) +
     `<button class="menu-btn" data-action="menu" aria-expanded="false" aria-controls="nav">Menu</button>`;
 }
@@ -796,7 +800,7 @@ function viewProfile(){
   const u = me(), farmer = u.mode === 'farmer';
   return `<section class="page"><div class="wrap narrow">
     <div class="p-head"><div><p class="eyebrow">Profile</p><h1 class="page-title">${esc(u.name)}</h1><p class="lede" style="font-size:18px">Member since ${u.since} · ${esc(u.city)}</p></div>
-      <div class="seg" role="group" aria-label="Account mode"><button class="${farmer ? '' : 'on'}" data-action="mode" data-mode="customer" aria-pressed="${!farmer}">Customer Mode</button><button class="${farmer ? 'on' : ''}" data-action="mode" data-mode="farmer" aria-pressed="${farmer}">Farmer Mode</button></div></div>
+      <div class="p-actions"><button class="btn btn-outline btn-sm" data-action="logout">Log Out</button><div class="seg" role="group" aria-label="Account mode"><button class="${farmer ? '' : 'on'}" data-action="mode" data-mode="customer" aria-pressed="${!farmer}">Customer Mode</button><button class="${farmer ? 'on' : ''}" data-action="mode" data-mode="farmer" aria-pressed="${farmer}">Farmer Mode</button></div></div></div>
     ${farmer ? farmerPanel(u) : customerPanel(u)}
   </div></section>`;
 }
